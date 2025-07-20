@@ -39,7 +39,7 @@ module tb_TopModut();
         $finish;
     end
 
-    // Optional: Monitor output QAM data
+   
     always @(posedge clk) begin
         if (valid_out) begin
             $display("Time %0t: I_out = %d, Q_out = %d", $time, I_out, Q_out);
