@@ -147,16 +147,23 @@ ser = sum(decoded_symbols(1:minlen) ~= quantized_data(1:minlen)) / minlen;
 fprintf(" Symbol Error Rate (SER): %.6f\n", ser);
 
 %% bandwidth 
-T = 1;  % (You can set this according to your system)
-effective_bit_rate = encoded_bits_length / T;  % bits per second after source coding
+encoded_bits_length = length(coded_bits);
+bits_per_symbol = 2;  % QPSK
 
-% Calculate symbol rate based on bits per symbol
+fs = 1e6;  % Sampling frequency in Hz — set according to your system! Adjust if needed.
+
+total_samples = length(tx_signal);  % Total samples transmitted (after pulse shaping)
+
+T = total_samples / fs;  % Total transmission time in seconds
+
+effective_bit_rate = encoded_bits_length / T;  % bits per second after coding
+
 symbol_rate = effective_bit_rate / bits_per_symbol;
 
-% Calculate bandwidth based on roll-off factor
 bandwidth = symbol_rate * (1 + rolloff);
 
-% Display results
-fprintf('Effective bit rate after source coding: %.2f bps\n', effective_bit_rate);
+fprintf('\n--- Actual Bit Rate and Bandwidth ---\n');
+fprintf('Transmission time: %.6f seconds\n', T);
+fprintf('Effective bit rate: %.2f bps\n', effective_bit_rate);
 fprintf('Symbol rate: %.2f symbols/sec\n', symbol_rate);
-fprintf('Estimated bandwidth required: %.2f Hz\n', bandwidth);
+fprintf('Estimated bandwidth: %.2f Hz\n', bandwidth);
